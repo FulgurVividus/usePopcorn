@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 // StarRating component
 // must be completely reusable & flexible
@@ -13,6 +14,18 @@ const starContainerStyle = {
   display: "flex",
 };
 
+// PropTypes - giving types to props
+StarRating.propTypes = {
+  maxRating: PropTypes.number,
+  color: PropTypes.string,
+  size: PropTypes.number,
+  className: PropTypes.string,
+  messages: PropTypes.array,
+  defaultRating: PropTypes.number,
+  onSetRating: PropTypes.func,
+};
+
+// Improve Reusability of this component with Props
 export default function StarRating({
   maxRating = 5,
   color = "#fcc419",
@@ -116,3 +129,11 @@ function Star({ onRate, full, onHoverIn, onHoverOut, color, size }) {
     </>
   );
 }
+
+//! SOME NOTES
+// 1. Props as a Component API
+// It means the user-creator connection of component. User gives some props to the component (they serve like APIs) and creator accepts them.
+// We need to find the right balance between too little and too many props, that works for both the consumer and the creator
+
+// 2. Improving Reusability with Props (related to 1)
+// If we need accept many props from the user, we should give some default values to these props and types too

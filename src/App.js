@@ -68,7 +68,6 @@ export default function App() {
         <Box
           element={
             <>
-              {" "}
               <WatchedSummary watched={watched} />
               <WatchedMoviesList watched={watched} />
             </>

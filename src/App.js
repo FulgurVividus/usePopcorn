@@ -50,17 +50,25 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
+// API - https://www.omdbapi.com
 const KEY = `38c94ee0`;
 
 export default function App() {
-  const [movies, setMovies] = useState(tempMovieData);
-  const [watched, setWatched] = useState(tempWatchedData);
+  const [movies, setMovies] = useState([]);
+  const [watched, setWatched] = useState([]);
+  const query = "interstellar";
 
   // Data fetching
   useEffect(function () {
-    fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=interstellar`)
-      .then((res) => res.json())
-      .then((data) => setMovies(data.Search));
+    async function fetchMovies() {
+      const res = await fetch(
+        `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
+      );
+      const data = await res.json();
+      setMovies(data.Search);
+      console.log(data.Search);
+    }
+    fetchMovies();
   }, []);
 
   return (
@@ -310,6 +318,6 @@ function WatchedMovie({ movie }) {
 
 //! SOME NOTES
 // 1. useEffect
-// Doesn't return anything, so we don't store the result in any variable. But instead we pass a function. This function contains a code that we want to run as s side effect.
+// Doesn't return anything, so we don't store the result in any variable. But instead we pass a function. This function contains a code that we want to run as a side effect.
 // useEffect(function () {}, [dependency array])
 // [] - means that the effect (specified in the useEffect) will only run after it 'mounts'

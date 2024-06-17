@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const tempMovieData = [
   {
@@ -50,9 +50,18 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
+const KEY = `38c94ee0`;
+
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
+
+  // Data fetching
+  useEffect(function () {
+    fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=interstellar`)
+      .then((res) => res.json())
+      .then((data) => setMovies(data.Search));
+  }, []);
 
   return (
     <>
@@ -298,3 +307,9 @@ function WatchedMovie({ movie }) {
     </>
   );
 }
+
+//! SOME NOTES
+// 1. useEffect
+// Doesn't return anything, so we don't store the result in any variable. But instead we pass a function. This function contains a code that we want to run as s side effect.
+// useEffect(function () {}, [dependency array])
+// [] - means that the effect (specified in the useEffect) will only run after it 'mounts'

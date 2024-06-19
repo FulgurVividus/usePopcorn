@@ -391,6 +391,17 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     [selectedId]
   );
 
+  // changing the title page according to the movie selected
+  useEffect(
+    function () {
+      if (!title) {
+        return;
+      }
+      document.title = `Movie | ${title}`;
+    },
+    [title]
+  );
+
   return (
     <>
       <div className="details">

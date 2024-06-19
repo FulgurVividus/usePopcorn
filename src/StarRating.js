@@ -48,7 +48,7 @@ export default function StarRating({
   const handleRating = function (rating) {
     setRating(rating);
     // to set external rating
-    onSetRating(rating);
+    // onSetRating(rating);
   };
 
   return (

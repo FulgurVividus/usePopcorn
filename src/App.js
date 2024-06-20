@@ -81,12 +81,19 @@ export default function App() {
   // Data fetching
   useEffect(
     function () {
+      // 1. using abort controller, it's browser API
+      const controller = new AbortController();
+
       async function fetchMovies() {
         try {
           setIsLoading(true);
           setError("");
+
+          // 2. in order to connect abort controller with the fetch function
+          // we pass in the 2nd argument
           const res = await fetch(
-            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
+            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
+            { signal: controller.signal }
           );
 
           if (!res.ok) {
@@ -100,9 +107,12 @@ export default function App() {
           }
 
           setMovies(data.Search);
+          setError("");
         } catch (error) {
           console.error(error.message);
-          setError(error.message);
+          if (!error.name === "AbortError") {
+            setError(error.message);
+          }
         } finally {
           setIsLoading(false);
         }
@@ -115,6 +125,10 @@ export default function App() {
       }
 
       fetchMovies();
+      // 3. clean up function
+      return function () {
+        controller.abort();
+      };
     },
     [query]
   );

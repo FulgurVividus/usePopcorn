@@ -213,6 +213,12 @@ function NumResults({ movies }) {
 
 // Search component
 function Search({ query, setQuery }) {
+  useEffect(function () {
+    const element = document.querySelector(".search");
+    console.log(element);
+    element.focus();
+  }, []);
+
   return (
     <>
       <input

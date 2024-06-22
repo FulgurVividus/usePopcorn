@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import StarRating from "./StarRating";
 
 const average = (arr) =>
@@ -213,11 +213,40 @@ function NumResults({ movies }) {
 
 // Search component
 function Search({ query, setQuery }) {
-  useEffect(function () {
-    const element = document.querySelector(".search");
-    console.log(element);
-    element.focus();
-  }, []);
+  // NOT preferred way !
+  // useEffect(function () {
+  //   const element = document.querySelector(".search");
+  //   console.log(element);
+  //   element.focus();
+  // }, []);
+
+  // using a Ref with DOM element happens in 3 steps
+  // 1. we create a Ref, useRef(initial value). When we work with DOM -> useRef(null)
+  const inputEl = useRef(null);
+
+  // 3. it's in useEffect in order to use 'ref' that's contained in DOM element (in our case 'input')
+  // cause the ref only gets added to this DOM element after the DOM has already loaded
+  useEffect(
+    function () {
+      const callback = function (e) {
+        if (document.activeElement === inputEl.current) {
+          return;
+        }
+
+        if (e.code === "Enter") {
+          inputEl.current.focus();
+          setQuery("");
+        }
+      };
+
+      document.addEventListener("keydown", callback);
+      // clean up
+      return function () {
+        document.removeEventListener("keydown", callback);
+      };
+    },
+    [setQuery]
+  );
 
   return (
     <>
@@ -227,6 +256,8 @@ function Search({ query, setQuery }) {
         placeholder="Search movies..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
+        // 2. use ref prop we 'connect' ref with this DOM element. We make in declarative way without selecting manually
+        ref={inputEl}
       />
     </>
   );

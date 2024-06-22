@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import StarRating from "./StarRating";
 import { useMovies } from "./useMovies";
 import { useLocalStorageState } from "./useLocalStorageState";
+import { useKey } from "./useKey";
 
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
@@ -13,10 +14,12 @@ export default function App() {
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
 
+  // CUSTOM HOOK
   // we pass query as the argument
   // store this function into variable as it returns the object and then destructure
   const { movies, isLoading, error } = useMovies(query);
 
+  // CUSTOM HOOK
   // make this custom hook to work as useState
   const [watched, setWatched] = useLocalStorageState([], "watched");
 
@@ -30,7 +33,6 @@ export default function App() {
 
   const handleAddWatched = function (movie) {
     setWatched((watched) => [...watched, movie]);
-    //
     // localStorage.setItem("watched", JSON.stringify([...watched, movie]));
   };
 
@@ -360,24 +362,8 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     // setAvgRating((avgRating) => (avgRating + userRating) / 2);
   };
 
-  // key press event
-  useEffect(
-    function () {
-      const callback = function (e) {
-        if (e.code === "Escape") {
-          onCloseMovie();
-        }
-      };
-
-      document.addEventListener("keydown", callback);
-
-      // clean up
-      return function () {
-        document.removeEventListener("keydown", callback);
-      };
-    },
-    [onCloseMovie]
-  );
+  // CUSTOM HOOK
+  useKey("Escape", onCloseMovie);
 
   // data fetching
   useEffect(

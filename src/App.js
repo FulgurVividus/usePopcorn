@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import StarRating from "./StarRating";
 import { useMovies } from "./useMovies";
+import { useLocalStorageState } from "./useLocalStorageState";
 
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
@@ -16,12 +17,8 @@ export default function App() {
   // store this function into variable as it returns the object and then destructure
   const { movies, isLoading, error } = useMovies(query);
 
-  // useState also accepts callback function and it must be pure (doesn't accept any params)
-  // executed on initial render
-  const [watched, setWatched] = useState(function () {
-    const storedValue = localStorage.getItem("watched");
-    return JSON.parse(storedValue);
-  });
+  // make this custom hook to work as useState
+  const [watched, setWatched] = useLocalStorageState([], "watched");
 
   const handleSelectMovie = function (id) {
     setSelectedId((selectedId) => (id === selectedId ? null : id));
@@ -40,14 +37,6 @@ export default function App() {
   const handleDeleteWatched = function (id) {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   };
-
-  // storing local storage
-  useEffect(
-    function () {
-      localStorage.setItem("watched", JSON.stringify(watched));
-    },
-    [watched]
-  );
 
   return (
     <>

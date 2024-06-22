@@ -1,5 +1,7 @@
 # usePopcorn 🎥🍿
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/6f985140-912d-4fef-8dd9-8173914296d3/deploy-status)](https://app.netlify.com/sites/fulgur-vividus-usepopcorn/deploys)
+
 ## Overview 📝
 
 usePopcorn is a React application developed using `npx create-react-app`. This project focuses on practicing essential React concepts such as `useState`, `useEffect`, Refs, custom hooks, and data fetching. The app allows users to search for movies, rate them, add them to a list, and view statistics about the added movies. Local storage is implemented to preserve the user's movie list across sessions.
